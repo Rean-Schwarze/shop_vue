@@ -1,6 +1,10 @@
 # shop_vue
 
-This template should help get you started developing with Vue 3 in Vite.
+### Undo
+
+详情页 - 右侧热榜信息
+
+会员中心
 
 ## Recommended IDE Setup
 
