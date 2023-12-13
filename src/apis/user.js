@@ -10,3 +10,13 @@ export const loginAPI=({account,password})=>{
         }
     })
 }
+export const registreAPI=({account,password,nickName,reciver,contact,address})=>{
+    return request({
+        url:'/register',
+        method:'POST',
+        data:{
+            account,password,nickName,reciver,contact,address
+        }
+
+    })
+}
