@@ -64,8 +64,10 @@ onMounted(()=>getNewList())
     }
 
     p {
-      font-size: 22px;
+      font-size: 20px;
       padding-top: 12px;
+      padding-left: 20px;
+      padding-right: 20px;
       text-align: center;
       text-overflow: ellipsis;
       overflow: hidden;

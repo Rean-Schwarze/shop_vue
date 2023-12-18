@@ -3,9 +3,11 @@ import {getOrderAPI} from "@/apis/pay.js";
 import {onMounted,ref} from "vue";
 import {useRoute} from "vue-router";
 import {useCountDown} from "@/composables/useCountDown.js";
+import {useUserStore} from "@/stores/user.js";
 
 const {formatTime,start}=useCountDown()
 
+const userStore=useUserStore()
 const route=useRoute()
 const payInfo = ref({})
 // 获取订单数据
@@ -19,10 +21,11 @@ onMounted(()=>getPayInfo())
 
 // 跳转支付，携带订单id以及回调地址跳转到支付地址（get）
 // 支付地址
-const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
-const backURL = 'http://127.0.0.1:5173/paycallback'
+const baseURL = 'http://8.138.110.114:8080/'
+const backURL = 'http://8.138.110.114:1145/paycallback'
 const redirectUrl = encodeURIComponent(backURL)
-const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
+const email=userStore.userInfo.email
+const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}&email=${email}`
 </script>
 
 

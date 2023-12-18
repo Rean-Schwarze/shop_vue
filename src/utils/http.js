@@ -5,7 +5,8 @@ import {useUserStore} from "@/stores/user.js";
 import router from '@/router'
 // 创建axios实例
 const http = axios.create({
-    baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
+    // baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
+    baseURL:'/api',
     timeout: 5000
 })
 
@@ -16,7 +17,7 @@ http.interceptors.request.use(config => {
     // 2. 按照后端要求拼接token数据
     const token=userStore.userInfo.token
     if(token){
-        config.headers.Authorization=`Bearer ${token}`
+        config.headers.Authorization=`${token}`
     }
     return config
 }, e => Promise.reject(e))

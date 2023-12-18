@@ -17,11 +17,11 @@ export const useCartStore = defineStore('cart',()=>{
     }
     //2. 定义action - addCart
     const addCart=async (goods)=>{
-        const {skuId,count}=goods
+        const {id,skuId,count}=goods
         if (isLogin.value)
         {
             // 已登录的加入购物车逻辑
-            await insertCartAPI({skuId,count})
+            await insertCartAPI({id,skuId,count})
             const res=await findNewCartListAPI()
             cartList.value=res.result
         }

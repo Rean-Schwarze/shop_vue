@@ -35,5 +35,16 @@ export default defineConfig({
         `,
       }
     }
+  },
+  server: {
+    // host:'http://8.138.110.114',
+    // port: '1145',
+    proxy: {
+      '/api': {
+        target: 'http://8.138.110.114:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
+      }
+    }
   }
 })

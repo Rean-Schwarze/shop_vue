@@ -2,11 +2,12 @@
 import request from '@/utils/http.js'
 
 // 加入购物车
-export const insertCartAPI=({skuId,count})=>{
+export const insertCartAPI=({id,skuId,count})=>{
     return request({
         url:'/member/cart',
         method:'POST',
         data:{
+            id,
             skuId,
             count
         }
@@ -16,14 +17,14 @@ export const insertCartAPI=({skuId,count})=>{
 // 获取购物车列表
 export const findNewCartListAPI=()=>{
     return request({
-        url:'/member/cart'
+        url:'/member/cartlist'
     })
 }
 
 // 删除购物车
 export const delCartAPI=(ids)=>{
     return request({
-        url:'/member/cart',
+        url:'/member/cart/delete',
         method:'DELETE',
         data:{
             ids

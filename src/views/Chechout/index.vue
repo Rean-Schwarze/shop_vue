@@ -12,8 +12,8 @@ const curAddress=ref({})
 const getCheckInfo=async ()=>{
   const res= await getCheckInfoAPI()
   checkInfo.value=res.result
-  // 适配默认地址（isDefault===0）
-  const item=checkInfo.value.userAddresses.find(item=>item.isDefault===0)
+  // 适配默认地址（isDefault===true）
+  const item=checkInfo.value.userAddresses.find(item=>item.default===true)
   curAddress.value=item
 }
 onMounted(()=>getCheckInfo())

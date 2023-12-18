@@ -60,7 +60,7 @@ const categoryStore=useCategoryStore()
 
     li {
       margin-right: 40px;
-      width: 38px;
+      width: 80px;
       text-align: center;
 
       a {

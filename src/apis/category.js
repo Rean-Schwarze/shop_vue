@@ -2,7 +2,7 @@ import http from '@/utils/http.js'
 
 export function getCategoryAPI(id){
     return http({
-        url:'/category',
+        url:'/home/category',
         params:{
             id
         }

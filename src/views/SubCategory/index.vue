@@ -25,8 +25,10 @@ const reqData=ref({
 const getGoodList=async ()=>{
   const res=await getSubCategoryAPI(reqData.value)
   goodList.value=res.result.items
+  console.log(res.result)
 }
 onMounted(()=>getGoodList())
+
 
 //tab切换回调
 const tabChange=()=>{

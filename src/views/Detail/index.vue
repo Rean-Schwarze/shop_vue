@@ -4,8 +4,10 @@ import {onMounted,ref} from "vue";
 import {useRoute} from "vue-router";
 import {ElMessage} from "element-plus";
 import {useCartStore} from "@/stores/cartStore.js";
+import {useUserStore} from "@/stores/user.js";
 
 const cartStore=useCartStore()
+const userStore=useUserStore()
 const route=useRoute()
 const goods=ref({})
 const getGoods=async ()=>{
@@ -38,7 +40,8 @@ const addCart=()=>{
       count:count.value,
       skuId:skuObj.skuId,
       attrsText:skuObj.specsText,
-      selected:true
+      selected:true,
+      user_id:userStore.userInfo.id
     })
   }
   else{

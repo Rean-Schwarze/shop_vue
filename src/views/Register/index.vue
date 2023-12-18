@@ -3,7 +3,7 @@ import {ref} from "vue";
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import {useRouter} from "vue-router";
-import {registreAPI} from "@/apis/user.js";
+import {registerAPI} from "@/apis/user.js";
 
 // 表单校验（账号名、密码）
 // 1. 准备表单对象
@@ -52,7 +52,7 @@ const doRegister=()=>{
   formRef.value.validate(async (valid)=>{
     // valid:所有表单都通过校验才true
     if(valid){
-      const res=await registreAPI({account,password,nickName,receiver,contact,address})
+      const res=await registerAPI({account,password,nickName,receiver,contact,address})
       result.value=res.result
       if (result.value.success==='true'){
         ElMessage({ type: 'success', message: '注册成功' })

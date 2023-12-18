@@ -2,7 +2,7 @@
 import request from '@/utils/http.js'
 export const loginAPI=({account,password})=>{
     return request({
-        url:'/login',
+        url:'/user/login',
         method:'POST',
         data:{
             account,
@@ -10,9 +10,9 @@ export const loginAPI=({account,password})=>{
         }
     })
 }
-export const registreAPI=({account,password,nickName,reciver,contact,address})=>{
+export const registerAPI=({account,password,nickName,reciver,contact,address})=>{
     return request({
-        url:'/register',
+        url:'/user/register',
         method:'POST',
         data:{
             account,password,nickName,reciver,contact,address

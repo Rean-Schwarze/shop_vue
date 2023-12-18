@@ -12,14 +12,14 @@ export function getBannerAPI(params={}){
     })
 }
 
-/**
- * @description: 获取新鲜好物
- * @param {*}
- * @return {*}
- */
-export const findNewAPI = () => {
+// 获取新鲜好物
+export const findNewAPI = (params={}) => {
+    const {limit=4}=params
     return http({
-        url:'/home/new'
+        url:'/home/new',
+        params:{
+            limit
+        }
     })
 }
 
