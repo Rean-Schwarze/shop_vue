@@ -10,13 +10,12 @@ export const loginAPI=({account,password})=>{
         }
     })
 }
-export const registerAPI=({account,password,nickName,reciver,contact,address})=>{
+export const registerAPI=({account,password,nickName,receiver,contact,address,email})=>{
     return request({
         url:'/user/register',
         method:'POST',
         data:{
-            account,password,nickName,reciver,contact,address
+            account,password,nickName,receiver,contact,address,email
         }
-
     })
 }

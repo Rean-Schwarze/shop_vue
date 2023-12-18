@@ -14,7 +14,8 @@ const form=ref({
   nickName:'',
   receiver:'',
   contact:'',
-  address:''
+  address:'',
+  email:'',
 })
 // 2. 准备规则对象
 const rules={
@@ -25,6 +26,7 @@ const rules={
     {required:true,message:'密码不能为空',trigger:"blur"},
     {min:6,max:14,message:'密码长度为6~14字符',trigger:"blur"}
   ],
+  email:[{required:true,message:"邮箱不能为空",trigger:"bulr"}],
   agree:[
     {
       validator:(rule,value,callback)=>{
@@ -48,13 +50,13 @@ const formRef=ref(null)
 const router=useRouter()
 const result=ref({})
 const doRegister=()=>{
-  const {account,password,nickName,receiver,contact,address}=form.value
+  const {account,password,nickName,receiver,contact,address,email}=form.value
   formRef.value.validate(async (valid)=>{
     // valid:所有表单都通过校验才true
     if(valid){
-      const res=await registerAPI({account,password,nickName,receiver,contact,address})
-      result.value=res.result
-      if (result.value.success==='true'){
+      const res=await registerAPI({account,password,nickName,receiver,contact,address,email})
+      result.value=res.message
+      if (result.value==='操作成功'){
         ElMessage({ type: 'success', message: '注册成功' })
         await router.replace({path: '/login'})
       }
@@ -99,8 +101,11 @@ const doRegister=()=>{
               <el-form-item prop="nickName"  label="昵称">
                 <el-input v-model="form.nickName"/>
               </el-form-item>
-              <el-form-item prop="reciver"  label="收货人姓名">
-                <el-input v-model="form.reciver"/>
+              <el-form-item prop="email"  label="邮箱">
+                <el-input v-model="form.email"/>
+              </el-form-item>
+              <el-form-item prop="receiver"  label="收货人姓名">
+                <el-input v-model="form.receiver"/>
               </el-form-item>
               <el-form-item prop="contact"  label="收货人手机">
                 <el-input v-model="form.contact"/>
@@ -185,7 +190,7 @@ const doRegister=()=>{
 
 .login-section {
   background: #fff;
-  height: 544px;
+  height: 560px;
   position: relative;
 
   .wrapper {
