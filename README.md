@@ -2,6 +2,10 @@
 
 ## Information
 
+测试账号：test1
+
+测试账号密码：114514
+
 沙箱账号：qjbggr6502@sandbox.com
 
 登陆&支付密码：111111
