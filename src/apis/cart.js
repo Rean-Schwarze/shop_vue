@@ -18,6 +18,7 @@ export const insertCartAPI=({id,skuId,count})=>{
 export const findNewCartListAPI=()=>{
     return request({
         url:'/member/cartlist'
+        // url:'/member/cart'
     })
 }
 

@@ -56,7 +56,17 @@
 <!--            <a href="javascript:;">搜索推荐</a>-->
 <!--            <a href="javascript:;">友情链接</a>-->
           </p>
-          <p>CopyRight © 陈敬安</p>
+          <p>本网站是小孩子不懂事做着玩的，不是官方，不能真的买到产品！</p>
+          <p>
+            数据来源：
+            <a href="https://dreamtonics-cn.taobao.com/index.htm?spm=a1z10.5-c-s.w5002-24117037796.2.1af86f49yEgE7W#/">
+              Dreamtonics（淘宝）
+            </a>
+            <a href="https://quadimension.taobao.com/?spm=a1z10.1-c.0.0.6b2a7218HfMFcX">
+              平行四界Quadimension（淘宝）
+            </a>
+          </p>
+          <p>CopyRight © Rean</p>
         </div>
       </div>
     </div>

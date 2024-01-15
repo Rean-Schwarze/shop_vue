@@ -1,6 +1,6 @@
 <script setup>
-import {getCheckInfoAPI,createOrderAPI} from "@/apis/checkout.js";
-import {onMounted,ref} from "vue"
+import {createOrderAPI, getCheckInfoAPI} from "@/apis/checkout.js";
+import {onMounted, ref} from "vue"
 import {useRouter} from "vue-router";
 import {useCartStore} from "@/stores/cartStore.js";
 
@@ -13,8 +13,7 @@ const getCheckInfo=async ()=>{
   const res= await getCheckInfoAPI()
   checkInfo.value=res.result
   // 适配默认地址（isDefault===true）
-  const item=checkInfo.value.userAddresses.find(item=>item.default===true)
-  curAddress.value=item
+  curAddress.value=checkInfo.value.userAddresses.find(item => item.default === true)
 }
 onMounted(()=>getCheckInfo())
 

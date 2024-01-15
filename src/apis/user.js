@@ -2,7 +2,8 @@
 import request from '@/utils/http.js'
 export const loginAPI=({account,password})=>{
     return request({
-        url:'/user/login',
+        url: '/user/login',
+        // url:'/login',
         method:'POST',
         data:{
             account,
@@ -16,6 +17,15 @@ export const registerAPI=({account,password,nickName,receiver,contact,address,em
         method:'POST',
         data:{
             account,password,nickName,receiver,contact,address,email
+        }
+    })
+}
+
+export const getLikeListAPI = ({ limit = 4 }) => {
+    return request({
+        url:'/goods/relevant',
+        params: {
+            limit
         }
     })
 }
