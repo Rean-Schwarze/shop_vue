@@ -72,6 +72,8 @@ export const useCartStore = defineStore('cart',()=>{
     const allCheck=(selected)=>{
         cartList.value.forEach(item=>item.selected=selected)
     }
+    // 存储购物车中所选择商品的skuId
+    const selectedItem=ref([])
     return {
         cartList,
         addCart,
@@ -84,7 +86,8 @@ export const useCartStore = defineStore('cart',()=>{
         singleCheck,
         isAll,
         allCheck,
-        updateNewList
+        updateNewList,
+        selectedItem
     }
 },{
     persist:true,

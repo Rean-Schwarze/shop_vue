@@ -25,10 +25,11 @@ http.interceptors.request.use(config => {
 // axios响应式拦截器
 http.interceptors.response.use(res => res.data, e => {
     const userStore=useUserStore()
+    console.log(e.response)
     // 统一错误提示
     ElMessage({
         type:'warning',
-        message:e.response.data.message
+        message:e.response.status+': '+e.response.statusText
     })
     // 401 token失效处理
     if(e.response.status===401){

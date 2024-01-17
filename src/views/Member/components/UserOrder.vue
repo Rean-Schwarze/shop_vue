@@ -1,6 +1,7 @@
 <script setup>
 import {getUserOrder} from '@/apis/order.js'
 import {ref,onMounted} from "vue";
+import moment from 'moment';
 
 // tab列表
 const tabTypes = [
@@ -30,6 +31,7 @@ onMounted(()=>getOrderList())
 
 // tab切换
 const tabChange=(type)=>{
+  params.value.page=1
   params.value.orderState=type
   // 重新获取数据
   getOrderList()
@@ -53,6 +55,10 @@ const formatPayState = (payState) => {
   }
   return stateMap[payState]
 }
+
+const formatCountdown=(countdown)=>{
+  return moment(countdown).format("mm分ss秒")
+}
 </script>
 
 <template>
@@ -74,7 +80,7 @@ const formatPayState = (payState) => {
               <!-- 未付款，倒计时时间还有 -->
               <span class="down-time" v-if="order.orderState === 1">
                 <i class="iconfont icon-down-time"></i>
-                <b>付款截止: {{order.countdown}}</b>
+                <b>付款截止: {{order.countdown===-1?"已截止":formatCountdown(order.countdown)}}</b>
               </span>
             </div>
             <div class="body">
@@ -115,7 +121,7 @@ const formatPayState = (payState) => {
                 <p>在线支付</p>
               </div>
               <div class="column action">
-                <el-button  v-if="order.orderState === 1" type="primary"
+                <el-button  v-if="order.orderState === 1 && order.countdown!==-1" type="primary"
                             size="small">
                   立即付款
                 </el-button>
@@ -135,7 +141,8 @@ const formatPayState = (payState) => {
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination :total="total" :page-size="params.pageSize" @current-change="pageChange" background layout="prev, pager, next" />
+            <el-pagination :total="total" :page-size="params.pageSize" v-model:current-page.sync="params.page"
+                           @current-change="pageChange" background layout="prev, pager, next" />
           </div>
         </div>
       </div>

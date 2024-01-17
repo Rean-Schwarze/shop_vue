@@ -41,11 +41,16 @@ const categoryStore=useCategoryStore()
   position: relative;
   z-index: 99;
 
+
   .menu {
     li {
-      padding-left: 40px;
+      padding-left: 30px;
       height: 55px;
       line-height: 55px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:#ffffff;
 
       &:hover {
         background: $xtxColor;

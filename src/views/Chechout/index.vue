@@ -7,13 +7,18 @@ import {useCartStore} from "@/stores/cartStore.js";
 const cartStore=useCartStore()
 const router=useRouter()
 const checkInfo = ref({})  // 订单对象
-console.log(checkInfo)
 const curAddress=ref({})
+const totalPrice=ref(0)
+const totalPayPrice=ref(0)
 const getCheckInfo=async ()=>{
-  const res= await getCheckInfoAPI()
+  const res= await getCheckInfoAPI({
+    skus:cartStore.selectedItem.value
+  })
   checkInfo.value=res.result
   // 适配默认地址（isDefault===true）
   curAddress.value=checkInfo.value.userAddresses.find(item => item.default === true)
+  totalPrice.value=checkInfo.value.summary.totalPrice
+  totalPayPrice.value=totalPrice.value
 }
 onMounted(()=>getCheckInfo())
 
@@ -34,8 +39,8 @@ const confirm=()=>{
 // 创建订单
 const createOrder=async ()=>{
   const res=await createOrderAPI({
-    deliveryTimeType:1,
-    payType:1,
+    deliveryTimeType:deliveryTimeType.value,
+    payType:payType.value,
     payChannel:1,
     buyerMessage:'',
     goods:checkInfo.value.goods.map(item=>{
@@ -55,6 +60,25 @@ const createOrder=async ()=>{
   })
   // 更新购物车
   await cartStore.updateNewList()
+}
+
+const payType=ref(0)
+const postFee=ref(0)
+const switchPayType=(type)=>{
+  payType.value=type
+  if(type===0){
+    postFee.value=0
+    totalPayPrice.value=totalPrice.value
+  }
+  else {
+    postFee.value=5
+    totalPayPrice.value=totalPrice.value+5
+  }
+}
+
+const deliveryTimeType=ref(0)
+const switchDeliveryTimeType=(type)=>{
+  deliveryTimeType.value=type
 }
 
 </script>
@@ -116,15 +140,15 @@ const createOrder=async ()=>{
         <!-- 配送时间 -->
         <h3 class="box-title">配送时间</h3>
         <div class="box-body">
-          <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
-          <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
-          <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
+          <a :class="deliveryTimeType===0?'my-btn active':'my-btn'" @click="switchDeliveryTimeType(0)">不限送货时间：周一至周日</a>
+          <a :class="deliveryTimeType===1?'my-btn active':'my-btn'" @click="switchDeliveryTimeType(1)">工作日送货：周一至周五</a>
+          <a :class="deliveryTimeType===2?'my-btn active':'my-btn'" @click="switchDeliveryTimeType(2)">双休日、假日送货：周六至周日</a>
         </div>
         <!-- 支付方式 -->
         <h3 class="box-title">支付方式</h3>
         <div class="box-body">
-          <a class="my-btn active" href="javascript:;">在线支付</a>
-          <a class="my-btn" href="javascript:;">货到付款</a>
+          <a :class="payType===0?'my-btn active':'my-btn'" @click="switchPayType(0)" >在线支付</a>
+          <a :class="payType===1?'my-btn active':'my-btn'" @click="switchPayType(1)" >货到付款</a>
           <span style="color:#999">货到付款需付5元手续费</span>
         </div>
         <!-- 金额明细 -->
@@ -141,11 +165,11 @@ const createOrder=async ()=>{
             </dl>
             <dl>
               <dt>运<i></i>费：</dt>
-              <dd>¥{{ checkInfo.summary?.postFee.toFixed(2) }}</dd>
+              <dd>¥{{ postFee.toFixed(2) }}</dd>
             </dl>
             <dl>
               <dt>应付总额：</dt>
-              <dd class="price">{{ checkInfo.summary?.totalPayPrice.toFixed(2) }}</dd>
+              <dd class="price">¥{{ totalPayPrice.toFixed(2) }}</dd>
             </dl>
           </div>
         </div>
@@ -325,6 +349,7 @@ const createOrder=async ()=>{
   &.active,
   &:hover {
     border-color: $xtxColor;
+    cursor:pointer;
   }
 }
 

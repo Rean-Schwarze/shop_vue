@@ -2,9 +2,12 @@
 import request from "@/utils/http.js";
 
 // 获取详情接口
-export const getCheckInfoAPI=()=>{
+export const getCheckInfoAPI=(data)=>{
+    // console.log(data)
     return request({
-        url:'/member/order/pre'
+        url:'/member/order/pre',
+        method:'POST',
+        data
     })
 }
 

@@ -1,13 +1,26 @@
 <script setup>
 import {useCartStore} from "@/stores/cartStore.js";
-const cartStore=useCartStore()
+import {useRouter} from "vue-router";
 
+const cartStore=useCartStore()
+const router=useRouter()
 // 单选回调
 const singleCheck=(i,selected)=>{
   cartStore.singleCheck(i.skuId,selected)
 }
 const allCheck=(selected)=>{
   cartStore.allCheck(selected)
+}
+
+const beforeRoutePush=()=>{
+  const test=[]
+  cartStore.cartList.forEach((item)=>{
+    if(item.selected===true){
+      test.push(item.skuId)
+    }
+  })
+  cartStore.selectedItem.value=test
+  router.push('/checkout')
 }
 </script>
 
@@ -84,7 +97,7 @@ const allCheck=(selected)=>{
           <span class="red">¥ {{cartStore.selectedPrice.toFixed(2)}} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" @click="$router.push('/checkout')" >下单结算</el-button>
+          <el-button size="large" type="primary" @click="beforeRoutePush" >下单结算</el-button>
         </div>
       </div>
     </div>
