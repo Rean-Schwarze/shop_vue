@@ -30,6 +30,7 @@ onMounted(()=>getOrderList())
 
 // tab切换
 const tabChange=(type)=>{
+  params.value.page=1
   params.value.orderState=type
   // 重新获取数据
   getOrderList()
@@ -135,7 +136,8 @@ const formatPayState = (payState) => {
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination :total="total" :page-size="params.pageSize" @current-change="pageChange" background layout="prev, pager, next" />
+            <el-pagination :total="total" :page-size="params.pageSize" v-model:current-page.sync="params.page"
+                           @current-change="pageChange" background layout="prev, pager, next" />
           </div>
         </div>
       </div>
