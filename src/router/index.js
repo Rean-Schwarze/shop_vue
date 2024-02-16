@@ -13,6 +13,9 @@ import PayBack from '@/views/Pay/PayBack.vue'
 import Member from '@/views/Member/index.vue'
 import UserInfo from '@/views/Member/components/UserInfo.vue'
 import UserOrder from "@/views/Member/components/UserOrder.vue";
+import UserConfig from '@/views/Member/components/UserConfig.vue';
+import UserAddress from "@/views/Member/components/UserAddress.vue";
+import UserSecurity from "@/views/Member/components/UserSecurity.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -64,6 +67,18 @@ const router = createRouter({
             {
               path:'order',
               component:UserOrder
+            },
+            {
+              path:'config',
+              component:UserConfig
+            },
+            {
+              path:'address',
+              component:UserAddress
+            },
+            {
+              path:'security',
+              component:UserSecurity
             }
           ]
         }

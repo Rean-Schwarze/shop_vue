@@ -3,6 +3,8 @@ import {createOrderAPI, getCheckInfoAPI} from "@/apis/checkout.js";
 import {onMounted, ref} from "vue"
 import {useRouter} from "vue-router";
 import {useCartStore} from "@/stores/cartStore.js";
+import AddressFormDialog from "@/components/dialog/AddressFormDialog.vue";
+import {MODE} from "@/composables/dialogTypes.js";
 
 const cartStore=useCartStore()
 const router=useRouter()
@@ -62,6 +64,7 @@ const createOrder=async ()=>{
   await cartStore.updateNewList()
 }
 
+// 支付方式、送货时间
 const payType=ref(0)
 const postFee=ref(0)
 const switchPayType=(type)=>{
@@ -79,6 +82,14 @@ const switchPayType=(type)=>{
 const deliveryTimeType=ref(0)
 const switchDeliveryTimeType=(type)=>{
   deliveryTimeType.value=type
+}
+
+// 添加/修改地址
+const formDialogRef = ref(AddressFormDialog)
+
+const openDialog=(mode)=>{
+  if (!formDialogRef.value) return
+  formDialogRef.value.openDialog(mode)
 }
 
 </script>
@@ -101,7 +112,7 @@ const switchDeliveryTimeType=(type)=>{
             </div>
             <div class="action">
               <el-button size="large" @click="showDialog = true">切换地址</el-button>
-              <el-button size="large" @click="addFlag = true">添加地址</el-button>
+              <el-button size="large" @click="openDialog(MODE.ADD)">添加地址</el-button>
             </div>
           </div>
         </div>
@@ -181,7 +192,7 @@ const switchDeliveryTimeType=(type)=>{
     </div>
   </div>
   <!-- 切换地址 -->
-  <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
+  <el-dialog v-model="showDialog" title="切换收货地址" width="40%" center>
     <div class="addressWrapper">
       <div class="text item" :class="{active:activeAddress.id===item.id}" @click="switchAddress(item)" v-for="item in checkInfo.userAddresses"  :key="item.id">
         <ul>
@@ -189,6 +200,7 @@ const switchDeliveryTimeType=(type)=>{
           <li><span>联系方式：</span>{{ item.contact }}</li>
           <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
         </ul>
+        <el-button size="large" @click="openDialog(MODE.EDIT)">修改</el-button>
       </div>
     </div>
     <template #footer>
@@ -199,6 +211,7 @@ const switchDeliveryTimeType=(type)=>{
     </template>
   </el-dialog>
   <!-- 添加地址 -->
+  <AddressFormDialog ref="formDialogRef"/>
 </template>
 
 <style scoped lang="scss">
@@ -408,7 +421,7 @@ const switchDeliveryTimeType=(type)=>{
     }
 
     >ul {
-      padding: 10px;
+      padding: 10px 160px 10px 20px;
       font-size: 14px;
       line-height: 30px;
     }

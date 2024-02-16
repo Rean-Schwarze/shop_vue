@@ -16,7 +16,8 @@ const form=ref({
 // 2. 准备规则对象
 const rules={
   account:[
-    {required:true,message:'用户名不能为空',trigger:"blur"}
+    {required:true,message:'账户不能为空',trigger:"blur"},
+    {pattern:/[^^#*%&',;=?\s$\x22]+/,message:'不能含有非法字符',trigger:'blur'}
   ],
   password:[
     {required:true,message:'密码不能为空',trigger:"blur"},
@@ -85,10 +86,10 @@ const doLogin=()=>{
                      status-icon>
 <!--              双向绑定-->
               <el-form-item prop="account"  label="账户">
-                <el-input v-model="form.account"/>
+                <el-input style="height:40px;" placeholder="手机号/邮箱" v-model="form.account"/>
               </el-form-item>
               <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" show-password/>
+                <el-input style="height:40px;" v-model="form.password" show-password/>
               </el-form-item>
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox v-model="form.agree" size="large">
@@ -178,7 +179,7 @@ const doLogin=()=>{
   position: relative;
 
   .wrapper {
-    width: 380px;
+    width: 420px;
     background: #fff;
     position: absolute;
     left: 50%;
@@ -188,7 +189,7 @@ const doLogin=()=>{
 
     nav {
       font-size: 14px;
-      height: 55px;
+      height: 68px;
       margin-bottom: 20px;
       border-bottom: 1px solid #f5f5f5;
       display: flex;
@@ -245,32 +246,32 @@ const doLogin=()=>{
   }
 
   .form {
-    padding: 0 20px 20px 20px;
+    padding: 2px 20px 20px 20px;
 
     &-item {
       margin-bottom: 28px;
 
       .input {
         position: relative;
-        height: 36px;
+        height: 46px;
 
         >i {
           width: 34px;
-          height: 34px;
+          height: 46px;
           background: #cfcdcd;
           color: #fff;
           position: absolute;
           left: 1px;
           top: 1px;
           text-align: center;
-          line-height: 34px;
+          line-height: 46px;
           font-size: 18px;
         }
 
         input {
           padding-left: 44px;
           border: 1px solid #cfcdcd;
-          height: 36px;
+          height: 46px;
           line-height: 36px;
           width: 100%;
 
@@ -289,12 +290,12 @@ const doLogin=()=>{
           right: 1px;
           top: 1px;
           text-align: center;
-          line-height: 34px;
+          line-height: 46px;
           font-size: 14px;
           background: #f5f5f5;
           color: #666;
           width: 90px;
-          height: 34px;
+          height: 46px;
           cursor: pointer;
         }
       }

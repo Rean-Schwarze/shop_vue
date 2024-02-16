@@ -6,11 +6,25 @@ export const useCountDown=()=>{
     let timer=null
     const time=ref(0)
     const formatTime = computed(() => dayjs.unix(time.value).format('mm分ss秒'))
+    const formatTimeSecond = computed(() => dayjs.unix(time.value).format('ss秒'))
     // 2.开启倒计时
     const start=(currentTime)=>{
         time.value=currentTime
         timer=setInterval(()=>{
-            time.value--
+            if(time.value>0){
+                time.value--
+            }
+        },1000)
+    }
+    const startWithTimeout=(currentTime,timeout)=>{
+        time.value=currentTime
+        timer=setInterval(()=>{
+            if(time.value>0){
+                time.value--
+            }
+            else{
+                timeout.value=true
+            }
         },1000)
     }
     onUnmounted(()=>{
@@ -18,6 +32,8 @@ export const useCountDown=()=>{
     })
     return {
         formatTime,
-        start
+        formatTimeSecond,
+        start,
+        startWithTimeout
     }
 }

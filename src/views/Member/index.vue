@@ -6,9 +6,12 @@
   <div class="container">
     <div class="xtx-member-aside">
       <div class="user-manage">
-        <h4>我的账户</h4>
+        <h4>账号管理</h4>
         <div class="links">
           <RouterLink to="/member/user">个人中心</RouterLink>
+          <RouterLink to="/member/config">编辑资料</RouterLink>
+          <RouterLink to="/member/security">安全管理</RouterLink>
+          <RouterLink to="/member/address">地址管理</RouterLink>
         </div>
         <h4>交易管理</h4>
         <div class="links">

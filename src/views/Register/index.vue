@@ -4,11 +4,14 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import {useRouter} from "vue-router";
 import {registerAPI} from "@/apis/user.js";
+import { regionData, codeToText } from 'element-china-area-data'
+
 
 // 表单校验（账号名、密码）
 // 1. 准备表单对象
 const form=ref({
   account:'',
+  phone:'',
   password:'',
   agree:false,
   nickName:'',
@@ -20,13 +23,20 @@ const form=ref({
 // 2. 准备规则对象
 const rules={
   account:[
-    {required:true,message:'用户名不能为空',trigger:"blur"}
+    {pattern:/[^^#*%&',;=?\s$\x22]+/,message:'不能含有非法字符',trigger:'blur'}
+  ],
+  phone:[
+    {required:true,message:'手机号不能为空',trigger:'blur'},
+    {pattern:/^\d{11}$/,message:'手机号必须是11位数字',trigger:'blur'}
   ],
   password:[
     {required:true,message:'密码不能为空',trigger:"blur"},
     {min:6,max:14,message:'密码长度为6~14字符',trigger:"blur"}
   ],
-  email:[{required:true,message:"邮箱不能为空",trigger:"bulr"}],
+  email:[
+    {required:true,message:"邮箱不能为空",trigger:"blur"},
+    {pattern:/@[A-Za-z0-9]+.[A-Za-z]+$/,message:"邮箱格式错误",trigger:"blur"}
+  ],
   agree:[
     {
       validator:(rule,value,callback)=>{
@@ -43,18 +53,44 @@ const rules={
       }
     }
   ],
-  contact:[{min:11,max:11,message:'手机号必须是11位',trigger:'blur'}]
+  receiver:[
+    {pattern:/[^^#*%&',;=?\s$\x22]+/,message:'不能含有非法字符',trigger:'blur'}
+  ],
+  contact:[
+    {pattern:/^\d{11}$/,message:'手机号必须是11位数字',trigger:'blur'}
+  ],
+  address:[
+    {pattern:/[^^#*%&',;=?\s$\x22]+/,message:'不能含有非法字符',trigger:'blur'}
+  ]
 }
 // 3. 获取form实例做统一校验
 const formRef=ref(null)
 const router=useRouter()
 const result=ref({})
+
+// 省市区选择
+const options = ref(regionData)
+const selectedOptions = ref([])
+const region=ref("")
+const handleChange = () => {
+  if (
+      selectedOptions.value[0] != null &&
+      selectedOptions.value[1] != null &&
+      selectedOptions.value[2] != null
+  ) {
+    region.value =
+        codeToText[selectedOptions.value[0]] + ' ' +
+        codeToText[selectedOptions.value[1]] + ' ' +
+        codeToText[selectedOptions.value[2]]
+  }
+}
+
 const doRegister=()=>{
-  const {account,password,nickName,receiver,contact,address,email}=form.value
+  const {account,phone,password,nickName,receiver,contact,address,email}=form.value
   formRef.value.validate(async (valid)=>{
     // valid:所有表单都通过校验才true
     if(valid){
-      const res=await registerAPI({account,password,nickName,receiver,contact,address,email})
+      const res=await registerAPI({account,phone,password,nickName,receiver,contact,address,email,region:region.value})
       result.value=res.message
       if (result.value==='操作成功'){
         ElMessage({ type: 'success', message: '注册成功' })
@@ -92,27 +128,38 @@ const doRegister=()=>{
             <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="100px"
                      status-icon>
               <!--              双向绑定-->
-              <el-form-item prop="account"  label="账户">
+              <el-form-item prop="account"  label="用户名">
                 <el-input v-model="form.account"/>
               </el-form-item>
-              <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" show-password/>
-              </el-form-item>
-              <el-form-item prop="nickName"  label="昵称">
-                <el-input v-model="form.nickName"/>
+              <el-form-item prop="phone"  label="手机号">
+                <el-input v-model="form.phone"/>
               </el-form-item>
               <el-form-item prop="email"  label="邮箱">
                 <el-input v-model="form.email"/>
               </el-form-item>
+              <el-form-item prop="password" label="密码">
+                <el-input v-model="form.password" show-password/>
+              </el-form-item>
+<!--              <el-form-item prop="nickName"  label="昵称">-->
+<!--                <el-input v-model="form.nickName"/>-->
+<!--              </el-form-item>-->
+              <el-divider></el-divider>
               <el-form-item prop="receiver"  label="收货人姓名">
                 <el-input v-model="form.receiver"/>
               </el-form-item>
               <el-form-item prop="contact"  label="收货人手机">
                 <el-input v-model="form.contact"/>
               </el-form-item>
+
               <el-form-item prop="address"  label="收货地址">
-                <el-input v-model="form.address"/>
+                <el-cascader
+                    size="default" style="padding-bottom: 6px;" placeholder="请选择地区"
+                    :options="options"
+                    v-model="selectedOptions"
+                    @change="handleChange"/>
+                <el-input placeholder="请输入详细地址" v-model="form.address"/>
               </el-form-item>
+
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox v-model="form.agree" size="large">
                   我已同意隐私条款和服务条款
@@ -137,7 +184,7 @@ const doRegister=()=>{
           <!--          <a href="javascript:;">搜索推荐</a>-->
           <!--          <a href="javascript:;">友情链接</a>-->
         </p>
-        <p>CopyRight &copy; 陈敬安</p>
+        <p>CopyRight &copy; Rean</p>
       </div>
     </footer>
   </div>
@@ -190,7 +237,7 @@ const doRegister=()=>{
 
 .login-section {
   background: #fff;
-  height: 560px;
+  height: 680px;
   position: relative;
 
   .wrapper {
@@ -225,7 +272,7 @@ const doRegister=()=>{
 }
 
 .login-footer {
-  padding: 30px 0 50px;
+  padding: 80px 0 50px;
   background: #fff;
 
   p {

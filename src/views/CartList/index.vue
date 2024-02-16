@@ -1,6 +1,7 @@
 <script setup>
 import {useCartStore} from "@/stores/cartStore.js";
 import {useRouter} from "vue-router";
+import {ElMessage} from "element-plus";
 
 const cartStore=useCartStore()
 const router=useRouter()
@@ -20,7 +21,15 @@ const beforeRoutePush=()=>{
     }
   })
   cartStore.selectedItem.value=test
-  router.push('/checkout')
+  if(test.length===0){
+    ElMessage({
+      type:'warning',
+      message:'尚未选择购物车内商品！'
+    })
+  }
+  else{
+    router.push('/checkout')
+  }
 }
 </script>
 
