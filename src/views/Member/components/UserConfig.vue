@@ -6,7 +6,8 @@ import {useUserStore} from "@/stores/user.js";
 import {useDialog} from "@/composables/useDialog.js";
 import CommonDialog from "@/components/dialog/CommonDialog.vue";
 import {ElMessage} from "element-plus";
-import {uploadAvatarAPI} from '@/apis/user.js';
+
+
 const userStore=useUserStore()
 
 // 表单校验（账号名、密码）
@@ -69,19 +70,22 @@ const imgUpload=async (info)=>{
   // this.file = file
   const formData = new FormData()
   formData.append('file', file)
-  const res=await uploadAvatarAPI(formData);
-  if(res.code===1){
-    ElMessage.success("上传成功！")
-    userStore.userInfo.avatar=res.result.url
-  }
-  else{
-    ElMessage.error(res.message)
-  }
+  await userStore.uploadAvatar(formData)
 }
 
 const handleClose = () => {
   closeDialog();
 };
+
+// 处理修改基本信息
+const handleModifyBasicInfo=()=>{
+  const {account,nickname}=form.value
+  formRef.value.validate(async (valid)=>{
+    if(valid){
+      await userStore.modifyUserBasicInfo({account,nickname})
+    }
+  })
+}
 </script>
 
 <template>
@@ -125,7 +129,7 @@ const handleClose = () => {
       </el-form-item>
     </el-form>
   </div>
-  <el-button size="large" class="avatar-btn">保存</el-button>
+  <el-button size="large" class="avatar-btn" @click="handleModifyBasicInfo">保存</el-button>
 </div>
 </template>
 

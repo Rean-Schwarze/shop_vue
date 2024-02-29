@@ -86,10 +86,22 @@ const switchDeliveryTimeType=(type)=>{
 
 // 添加/修改地址
 const formDialogRef = ref(AddressFormDialog)
-
-const openDialog=(mode)=>{
+const blockForm={
+  receiver:'',
+  contact:'',
+  region:'',
+  address:'',
+  isDefault:false,
+  id:-1
+}
+const openDialog=(mode, item)=>{
   if (!formDialogRef.value) return
-  formDialogRef.value.openDialog(mode)
+  if(item!==null){
+    formDialogRef.value.openDialog(mode,item)
+  }
+  else{
+    formDialogRef.value.openDialog(mode,blockForm)
+  }
 }
 
 </script>
@@ -107,12 +119,12 @@ const openDialog=(mode)=>{
               <ul v-else>
                 <li><span>收<i />货<i />人：</span>{{ curAddress.receiver }}</li>
                 <li><span>联系方式：</span>{{ curAddress.contact }}</li>
-                <li><span>收货地址：</span>{{ curAddress.fullLocation }} {{ curAddress.address }}</li>
+                <li><span>收货地址：</span>{{ curAddress.region }} {{ curAddress.address }}</li>
               </ul>
             </div>
             <div class="action">
               <el-button size="large" @click="showDialog = true">切换地址</el-button>
-              <el-button size="large" @click="openDialog(MODE.ADD)">添加地址</el-button>
+              <el-button size="large" @click="openDialog(MODE.ADD,null)">添加地址</el-button>
             </div>
           </div>
         </div>
@@ -198,9 +210,9 @@ const openDialog=(mode)=>{
         <ul>
           <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
           <li><span>联系方式：</span>{{ item.contact }}</li>
-          <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
+          <li><span>收货地址：</span>{{ item.region + ' ' + item.address }}</li>
         </ul>
-        <el-button size="large" @click="openDialog(MODE.EDIT)">修改</el-button>
+        <el-button size="large" @click="openDialog(MODE.EDIT,item)">修改</el-button>
       </div>
     </div>
     <template #footer>
@@ -211,7 +223,7 @@ const openDialog=(mode)=>{
     </template>
   </el-dialog>
   <!-- 添加地址 -->
-  <AddressFormDialog ref="formDialogRef"/>
+  <AddressFormDialog ref="formDialogRef" @update="getCheckInfo"/>
 </template>
 
 <style scoped lang="scss">

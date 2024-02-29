@@ -1,8 +1,12 @@
-# shop_vue
+# Store
+
+> [!NOTE]
+>
+> base on **小兔鲜儿**
 
 ## Information
 
-测试账号：test1
+测试账号：114514@qq.com
 
 测试账号密码：114514
 
@@ -14,36 +18,54 @@
 
 如果支付页面出现如下情况，等一会刷新一下就好
 
-![image.png](assets/image.png)
+![image.png](./README/image.png)
+
+## 新增部分（2024-03-01）
+
+在原版的基础上新增了或者补充了原来没有的或者没有实现的功能
+
+### 注册页面
+
+![image-20240301004218121](./README/image-20240301004218121.png)
+
+### 确认订单页
+
+- 新增了进入前的校验，如果没有选择商品则不跳转
+
+![image-20240301004436530](./README/image-20240301004436530.png)
+
+- 新增添加地址功能，弹窗进行了封装，方便复用
+
+![image-20240301004635422](./README/image-20240301004635422.png)
+
+- 补充配送时间、支付方式的acvtive样式，动态调整运费
+
+![image-20240301004758044](./README/image-20240301004758044.png)
+
+### 会员中心页
+
+- 新增编辑资料、安全管理、地址管理三个子页面
+
+![image-20240301005033006](./README/image-20240301005033006.png)
+
+- 新增头像以及基础信息的修改功能
+
+![image-20240301005122392](./README/image-20240301005122392.png)
+
+- 新增安全管理页（具体功能暂未实现）
+
+![image-20240301005239995](./README/image-20240301005239995.png)
+
+- 新增地址管理页，支持添加、修改收货地址信息
+
+![image-20240301005328241](./README/image-20240301005328241.png)
 
 ## Todo
 
 详情页 - 右侧热榜信息
 
-会员中心（订单查看、收获地址修改、……）
+首页完善
 
-支付回调结果显示
+搜索页
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+订单详情页

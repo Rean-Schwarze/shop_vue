@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import {useRouter} from "vue-router";
 import {registerAPI} from "@/apis/user.js";
-import { regionData, codeToText } from 'element-china-area-data'
+// import { regionData, codeToText } from 'element-china-area-data'
 
 
 // 表单校验（账号名、密码）
@@ -15,9 +15,9 @@ const form=ref({
   password:'',
   agree:false,
   nickName:'',
-  receiver:'',
-  contact:'',
-  address:'',
+  // receiver:'',
+  // contact:'',
+  // address:'',
   email:'',
 })
 // 2. 准备规则对象
@@ -31,7 +31,7 @@ const rules={
   ],
   password:[
     {required:true,message:'密码不能为空',trigger:"blur"},
-    {min:6,max:14,message:'密码长度为6~14字符',trigger:"blur"}
+    {min:6,max:14,message:'密码长度应为6~14字符',trigger:"blur"}
   ],
   email:[
     {required:true,message:"邮箱不能为空",trigger:"blur"},
@@ -69,28 +69,28 @@ const router=useRouter()
 const result=ref({})
 
 // 省市区选择
-const options = ref(regionData)
-const selectedOptions = ref([])
-const region=ref("")
-const handleChange = () => {
-  if (
-      selectedOptions.value[0] != null &&
-      selectedOptions.value[1] != null &&
-      selectedOptions.value[2] != null
-  ) {
-    region.value =
-        codeToText[selectedOptions.value[0]] + ' ' +
-        codeToText[selectedOptions.value[1]] + ' ' +
-        codeToText[selectedOptions.value[2]]
-  }
-}
+// const options = ref(regionData)
+// const selectedOptions = ref([])
+// const region=ref("")
+// const handleChange = () => {
+//   if (
+//       selectedOptions.value[0] != null &&
+//       selectedOptions.value[1] != null &&
+//       selectedOptions.value[2] != null
+//   ) {
+//     region.value =
+//         codeToText[selectedOptions.value[0]] + ' ' +
+//         codeToText[selectedOptions.value[1]] + ' ' +
+//         codeToText[selectedOptions.value[2]]
+//   }
+// }
 
 const doRegister=()=>{
-  const {account,phone,password,nickName,receiver,contact,address,email}=form.value
+  const {account,phone,password,nickName,email}=form.value
   formRef.value.validate(async (valid)=>{
     // valid:所有表单都通过校验才true
     if(valid){
-      const res=await registerAPI({account,phone,password,nickName,receiver,contact,address,email,region:region.value})
+      const res=await registerAPI({account,phone,password,nickName,email})
       result.value=res.message
       if (result.value==='操作成功'){
         ElMessage({ type: 'success', message: '注册成功' })
@@ -143,22 +143,22 @@ const doRegister=()=>{
 <!--              <el-form-item prop="nickName"  label="昵称">-->
 <!--                <el-input v-model="form.nickName"/>-->
 <!--              </el-form-item>-->
-              <el-divider></el-divider>
-              <el-form-item prop="receiver"  label="收货人姓名">
-                <el-input v-model="form.receiver"/>
-              </el-form-item>
-              <el-form-item prop="contact"  label="收货人手机">
-                <el-input v-model="form.contact"/>
-              </el-form-item>
+<!--              <el-divider></el-divider>-->
+<!--              <el-form-item prop="receiver"  label="收货人姓名">-->
+<!--                <el-input v-model="form.receiver"/>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item prop="contact"  label="收货人手机">-->
+<!--                <el-input v-model="form.contact"/>-->
+<!--              </el-form-item>-->
 
-              <el-form-item prop="address"  label="收货地址">
-                <el-cascader
-                    size="default" style="padding-bottom: 6px;" placeholder="请选择地区"
-                    :options="options"
-                    v-model="selectedOptions"
-                    @change="handleChange"/>
-                <el-input placeholder="请输入详细地址" v-model="form.address"/>
-              </el-form-item>
+<!--              <el-form-item prop="address"  label="收货地址">-->
+<!--                <el-cascader-->
+<!--                    size="default" style="padding-bottom: 6px;" placeholder="请选择地区"-->
+<!--                    :options="options"-->
+<!--                    v-model="selectedOptions"-->
+<!--                    @change="handleChange"/>-->
+<!--                <el-input placeholder="请输入详细地址" v-model="form.address"/>-->
+<!--              </el-form-item>-->
 
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox v-model="form.agree" size="large">

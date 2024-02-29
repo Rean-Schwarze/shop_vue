@@ -11,12 +11,12 @@ export const loginAPI=({account,password})=>{
         }
     })
 }
-export const registerAPI=({account,phone,password,nickName,receiver,contact,address,email,region})=>{
+export const registerAPI=({account,phone,password,nickName,email})=>{
     return request({
         url:'/user/register',
         method:'POST',
         data:{
-            account,phone,password,nickName,receiver,contact,address,email,region
+            account,phone,password,nickName,email
         }
     })
 }
@@ -47,4 +47,47 @@ export const uploadAvatarAPI=(data)=>{
             'Content-Type': 'application/x-www-form-urlencoded'
         },
     })
+}
+
+//  修改用户基本信息
+export const modifyBasicInfoAPI=({account,nickname})=>{
+    return request({
+        url:'/user/modify/basic',
+        method:'POST',
+        data:{
+            account,
+            nickname
+        }
+    })
+}
+
+// 添加收货地址
+export const addAddressAPI=({receiver,contact,region,address,isDefault})=>{
+    return request({
+        url:'/user/address',
+        method:'POST',
+        data:{
+            receiver,
+            contact,
+            region,
+            address,
+            isDefault
+        }
+    })
+}
+
+// 修改收货地址
+export const modifyAddressAPI=({receiver,contact,region,address,isDefault,id})=>{
+    return request(({
+        url:'/user/modify/address',
+        method:'POST',
+        data:{
+            receiver,
+            contact,
+            region,
+            address,
+            isDefault,
+            id
+        }
+    }))
 }
