@@ -2,9 +2,10 @@
 
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {loginAPI} from "@/apis/user.js";
+import {loginAPI, uploadAvatarAPI} from "@/apis/user.js";
 import {useCartStore} from "@/stores/cartStore.js";
 import {mergeCartAPI} from "@/apis/cart.js";
+import {modifyBasicInfoAPI} from '@/apis/user.js';
 import { ElMessage } from 'element-plus'
 
 export const useUserStore=defineStore('user',()=>{
@@ -38,11 +39,36 @@ export const useUserStore=defineStore('user',()=>{
         userInfo.value={}
         cartStore.clearCart()
     }
+    // 上传头像
+    const uploadAvatar=async (formData)=>{
+        const res=await uploadAvatarAPI(formData);
+        if(res.code===1){
+            ElMessage.success("上传成功！")
+            userInfo.value.avatar=res.result.url
+        }
+        else{
+            ElMessage.error(res.message)
+        }
+    }
+    // 修改用户基本信息
+    const modifyUserBasicInfo=async ({account,nickname})=>{
+        const res=await modifyBasicInfoAPI({account,nickname})
+        if (res.code===1){
+            userInfo.value.account=account
+            userInfo.value.nickname=nickname
+            ElMessage.success(res.message)
+        }
+        else{
+            ElMessage.error(res.message)
+        }
+    }
     //3. 以对象的格式把state和action返回
     return {
         userInfo,
         getUserInfo,
-        clearUserInfo
+        clearUserInfo,
+        modifyUserBasicInfo,
+        uploadAvatar
     }
 },{
     persist:true,

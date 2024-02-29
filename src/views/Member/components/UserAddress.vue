@@ -5,18 +5,28 @@ import {ref,onMounted} from "vue";
 import {getAddressAPI} from "@/apis/user.js";
 
 const formDialogRef = ref(AddressFormDialog)
-
-const openDialog=(mode)=>{
+const blockForm={
+  receiver:'',
+  contact:'',
+  region:'',
+  address:'',
+  isDefault:false,
+  id:-1
+}
+const openDialog=(mode, item)=>{
   if (!formDialogRef.value) return
-  formDialogRef.value.openDialog(mode)
+  if(item!==null){
+    formDialogRef.value.openDialog(mode,item)
+  }
+  else{
+    formDialogRef.value.openDialog(mode,blockForm)
+  }
 }
 
 const addressList=ref([])
 const getUserAddress=async ()=>{
   const res=await getAddressAPI()
   addressList.value=res.result
-  console.log(activeAddress.value)
-  console.log(activeAddress.value===null)
 }
 
 onMounted(()=>getUserAddress())
@@ -35,23 +45,23 @@ const switchAddress=(item)=>{
       <h4>地址管理</h4>
     </div>
     <div class="add-btn">
-      <el-button @click="openDialog(MODE.ADD)">添加地址</el-button>
+      <el-button @click="openDialog(MODE.ADD,null)">添加地址</el-button>
     </div>
     <div class="addressWrapper">
       <div class="text item" :class="{active:activeAddress.id===item.id}" @click="switchAddress(item)" v-for="item in addressList"  :key="item.id">
         <ul>
           <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
           <li><span>联系方式：</span>{{ item.contact }}</li>
-          <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
+          <li><span>收货地址：</span>{{ item.region + ' '+ item.address }}</li>
         </ul>
         <div style="margin:auto;">
-          <el-button size="large" @click="openDialog(MODE.EDIT)">修改</el-button>
+          <el-button size="large" @click="openDialog(MODE.EDIT,item)">修改</el-button>
         </div>
       </div>
     </div>
 
   </div>
-  <AddressFormDialog ref="formDialogRef"/>
+  <AddressFormDialog ref="formDialogRef" @update="getUserAddress"/>
 </template>
 
 <style scoped lang="scss">

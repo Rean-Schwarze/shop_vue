@@ -4,15 +4,9 @@ import {ref} from "vue";
 import CommonDialog from "@/components/dialog/CommonDialog.vue";
 import {MODE} from "@/composables/dialogTypes.js";
 import {useFormDialog} from "@/composables/useFormDialog.js";
-import {codeToText, regionData} from "element-china-area-data";
+import {pcaTextArr} from "element-china-area-data";
+import {addAddressAPI,modifyAddressAPI} from "@/apis/user.js";
 
-const form=ref({
-  receiver:'',
-  contact:'',
-  region:'',
-  address:'',
-  isDefault:false
-})
 const formRef=ref(null)
 const rules={
   receiver:[
@@ -30,41 +24,63 @@ const rules={
 }
 
 // 省市区选择
-const options = ref(regionData)
-const selectedOptions = ref([])
 const region=ref("")
 const handleChange = () => {
-  if (
-      selectedOptions.value[0] != null &&
-      selectedOptions.value[1] != null &&
-      selectedOptions.value[2] != null
-  ) {
-    region.value =
-        codeToText[selectedOptions.value[0]] + ' ' +
-        codeToText[selectedOptions.value[1]] + ' ' +
-        codeToText[selectedOptions.value[2]]
-    form.value.region=region.value
-  }
+  // if (
+  //     selectedOptions.value[0] != null &&
+  //     selectedOptions.value[1] != null &&
+  //     selectedOptions.value[2] != null
+  // ) {
+  //   region.value =
+  //       codeToText[selectedOptions.value[0]] + ' ' +
+  //       codeToText[selectedOptions.value[1]] + ' ' +
+  //       codeToText[selectedOptions.value[2]]
+  // }
+  region.value =
+      selectedOptions.value[0] + ' ' +
+      selectedOptions.value[1] + ' ' +
+      selectedOptions.value[2]
+  form.value.region=region
 }
 const clearRegion=()=>{
   selectedOptions.value=[]
   region.value=""
 }
 
-const { visible, mode, closeDialog, openDialog } = useFormDialog(formRef)
+const { visible, mode, closeDialog, openDialog, form, selectedOptions } = useFormDialog(formRef)
 
 defineExpose({
   openDialog
 })
+
 const confirm = () => {
   if (!formRef.value) return;
-  formRef.value.validate((valid) => {
+  const {receiver,contact,region,address,isDefault,id}=form.value
+  formRef.value.validate(async (valid) => {
     if (valid) {
-      ElMessage({
-        message: "提交成功",
-        type: "success",
-      })
-      console.log(form)
+      // 添加收货地址
+      if (mode.value === MODE.ADD) {
+        const res = await addAddressAPI({receiver, contact, region, address, isDefault})
+        if(res.code===1){
+          ElMessage.success("添加收货地址成功！")
+          handleUpdate()
+        }
+        else{
+          ElMessage.error(res.message)
+        }
+      }
+      // 修改收货地址
+      else if(mode.value===MODE.EDIT){
+        const res=await modifyAddressAPI({receiver,contact,region,address,isDefault,id})
+        if(res.code===1){
+          ElMessage.success("修改收货地址成功！")
+          handleUpdate()
+        }
+        else{
+          ElMessage.error(res.message)
+        }
+      }
+
       clearRegion()
       closeDialog()
     }
@@ -78,6 +94,11 @@ const customClose = () => {
   // })
   clearRegion()
   closeDialog()
+}
+
+const emits = defineEmits(['update'])  //定义一个变量来接收父组件传来的方法
+const handleUpdate = () => {
+  emits('update')
 }
 </script>
 
@@ -101,7 +122,7 @@ const customClose = () => {
         <el-form-item prop="address" style="width: 95%;" label="收货地址">
           <el-cascader
               size="default" style="padding-bottom: 6px;" placeholder="请选择地区"
-              :options="options"
+              :options="pcaTextArr"
               v-model="selectedOptions"
               @change="handleChange"/>
           <el-input placeholder="请输入详细地址" v-model="form.address"/>
@@ -119,5 +140,6 @@ const customClose = () => {
 .addressWrapper {
   max-height: 500px;
   overflow-y: auto;
+  padding-top: 30px;
 }
 </style>
