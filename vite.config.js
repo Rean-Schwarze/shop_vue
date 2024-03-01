@@ -41,8 +41,8 @@ export default defineConfig({
     // port: '1145',
     proxy: {
       '/api': {
-        // target: 'http://8.138.110.114:8080',
-        target: 'http://127.0.0.1:8080',
+        target: 'http://8.138.110.114:8080',
+        // target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
       }
