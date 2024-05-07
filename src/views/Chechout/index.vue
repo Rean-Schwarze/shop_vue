@@ -2,6 +2,7 @@
 import {createOrderAPI, getCheckInfoAPI} from "@/apis/checkout.js";
 import {onMounted, ref} from "vue"
 import {useRouter} from "vue-router";
+import {ElMessage} from "element-plus";
 import {useCartStore} from "@/stores/cartStore.js";
 import AddressFormDialog from "@/components/dialog/AddressFormDialog.vue";
 import {MODE} from "@/composables/dialogTypes.js";
@@ -18,7 +19,7 @@ const getCheckInfo=async ()=>{
   })
   checkInfo.value=res.result
   // 适配默认地址（isDefault===true）
-  curAddress.value=checkInfo.value.userAddresses.find(item => item.default === true)
+  curAddress.value=checkInfo.value.userAddresses.find(item => item.isDefault === true)
   totalPrice.value=checkInfo.value.summary.totalPrice
   totalPayPrice.value=totalPrice.value
 }
@@ -40,28 +41,33 @@ const confirm=()=>{
 
 // 创建订单
 const createOrder=async ()=>{
-  const res=await createOrderAPI({
-    deliveryTimeType:deliveryTimeType.value,
-    payType:payType.value,
-    payChannel:1,
-    buyerMessage:'',
-    goods:checkInfo.value.goods.map(item=>{
-      return {
-        skuId:item.skuId,
-        count:item.count
+  if(checkInfo.value===null){
+    ElMessage.error("请求错误！")
+  }
+  else{
+    const res=await createOrderAPI({
+      deliveryTimeType:deliveryTimeType.value,
+      payType:payType.value,
+      payChannel:1,
+      buyerMessage:'',
+      goods:checkInfo.value.goods.map(item=>{
+        return {
+          skuId:item.skuId,
+          count:item.count
+        }
+      }),
+      addressId:curAddress.value.id
+    })
+    const orderId=res.result.id
+    await router.push({
+      path: '/pay',
+      query: {
+        id: orderId
       }
-    }),
-    addressId:curAddress.value.id
-  })
-  const orderId=res.result.id
-  await router.push({
-    path: '/pay',
-    query: {
-      id: orderId
-    }
-  })
-  // 更新购物车
-  await cartStore.updateNewList()
+    })
+    // 更新购物车
+    await cartStore.updateNewList()
+  }
 }
 
 // 支付方式、送货时间

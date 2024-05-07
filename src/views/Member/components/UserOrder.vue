@@ -88,7 +88,7 @@ const formatCountdown=(countdown)=>{
                 <ul>
                   <li v-for="item in order.skus" :key="item.id">
                     <a class="image" href="javascript:;">
-                      <img :src="item.image" alt="" />
+                      <img :src="item.image[0]" alt="" />
                     </a>
                     <div class="info">
                       <p class="name ellipsis-2">
