@@ -2,13 +2,23 @@
 import {useUserStore} from "@/stores/user.js";
 const userStore=useUserStore()
 import {useRouter} from "vue-router";
+import {logoutAPI} from "@/apis/user.js";
+import {ElMessage} from "element-plus";
 
 const router=useRouter()
-const confirm=()=>{
+const confirm=async ()=>{
   // 退出登陆业务逻辑实现
   // 1. 清除当前用户数据 触发action
-  userStore.clearUserInfo()
-  router.push('/login')
+  const res=await logoutAPI()
+  if(res.code===1){
+    userStore.clearUserInfo()
+    ElMessage.success("已退出登录")
+    router.push('/login')
+  }
+  else{
+    ElMessage.error("注销过程中发生错误！")
+  }
+
 }
 </script>
 

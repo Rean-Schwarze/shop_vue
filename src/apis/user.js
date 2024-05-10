@@ -11,6 +11,12 @@ export const loginAPI=({account,password})=>{
         }
     })
 }
+export const logoutAPI=()=>{
+    return request({
+        url: '/user/logout',
+        method:'POST',
+    })
+}
 export const registerAPI=({account,phone,password,nickName,email})=>{
     return request({
         url:'/user/register',
