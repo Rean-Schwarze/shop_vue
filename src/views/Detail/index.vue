@@ -1,10 +1,11 @@
 <script setup>
 import {getDetail} from "@/apis/detail.js";
-import {onMounted,ref} from "vue";
+import {onMounted,ref,onUnmounted} from "vue";
 import {useRoute} from "vue-router";
 import {ElMessage} from "element-plus";
 import {useCartStore} from "@/stores/cartStore.js";
 import {useUserStore} from "@/stores/user.js";
+import {uploadTpLogAPI} from "@/apis/user.js";
 
 const cartStore=useCartStore()
 const userStore=useUserStore()
@@ -14,7 +15,58 @@ const getGoods=async ()=>{
   const res=await getDetail(route.params.id)
   goods.value=res.result
 }
-onMounted(()=>getGoods())
+
+const browseTime=ref(0)
+let clearTimeSet=null
+const uploadTpLog=async (type)=>{
+  let userId=-1
+  const time=browseTime.value
+  const goodsId=goods.value.id
+
+  if(typeof userStore.userInfo.id!=="undefined"){
+    userId=userStore.userInfo.id
+  }
+  const res=await uploadTpLogAPI({userId, goodsId, time, type})
+  if(res.code===0){
+    ElMessage.error(res.message)
+  }
+}
+const beforeUnloadHandler=async (e)=>{
+  // 针对关闭窗口或者浏览器的
+  // e = e || window.event
+  // if (e) {
+  //   console.log(123)
+  //   e.returnValue = '关闭提示'
+  // }
+  if (clearTimeSet != null) {
+    clearInterval(clearTimeSet)
+    await uploadTpLog("close")
+  }
+  console.log('关闭窗口之后')
+}
+const startTimer=()=>{
+
+  // 设置定时器
+  clearTimeSet = setInterval(() => {
+    browseTime.value=browseTime.value+1
+  }, 1000)
+}
+
+const stopTimer=async ()=>{
+  clearInterval(clearTimeSet)
+  await uploadTpLog("route")
+}
+
+onMounted(()=> {
+  window.addEventListener('beforeunload',(e)=>beforeUnloadHandler(e))
+  getGoods()
+  startTimer()
+})
+
+onUnmounted(()=>{
+  window.removeEventListener('beforeunload',(e)=>beforeUnloadHandler(e))
+  stopTimer()
+})
 
 // sku 规格被操作时
 let skuObj={}

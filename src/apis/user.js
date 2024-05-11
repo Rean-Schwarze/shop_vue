@@ -97,3 +97,17 @@ export const modifyAddressAPI=({receiver,contact,region,address,isDefault,id})=>
         }
     }))
 }
+
+// 上传浏览商品停留时间
+export const uploadTpLogAPI=({userId,goodsId,time,type})=>{
+    return request({
+        url:'/user/log/tp',
+        method:'POST',
+        data:{
+            userId,
+            goodsId,
+            time,
+            type
+        }
+    })
+}
