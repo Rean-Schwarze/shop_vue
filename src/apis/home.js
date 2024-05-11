@@ -41,6 +41,9 @@ export const getHotAPI = () => {
  */
 export const getGoodsAPI = () => {
     return http({
-        url: '/home/goods'
+        url: '/home/goods',
+        params:{
+            limit:100,
+        }
     })
 }
