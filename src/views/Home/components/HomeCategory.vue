@@ -39,6 +39,7 @@ const categoryStore=useCategoryStore()
   height: 500px;
   background: rgba(0, 0, 0, 0.8);
   position: relative;
+  left:6%;
   z-index: 99;
 
 
@@ -66,7 +67,7 @@ const categoryStore=useCategoryStore()
       }
 
       .layer {
-        width: 990px;
+        width: 930px;
         height: 500px;
         background: rgba(255, 255, 255, 0.8);
         position: absolute;
@@ -100,7 +101,7 @@ const categoryStore=useCategoryStore()
             background: #fff;
 
             &:nth-child(3n) {
-              margin-right: 0;
+              margin-right: 15px;
             }
 
             a {
