@@ -14,6 +14,8 @@ const goods=ref({})
 const getGoods=async ()=>{
   const res=await getDetail(route.params.id)
   goods.value=res.result
+  selectedSku.value.price=goods.value.price
+  selectedSku.value.oldPrice=goods.value.oldPrice
 }
 
 const browseTime=ref(0)
@@ -72,7 +74,15 @@ onUnmounted(()=>{
 let skuObj={}
 const skuChange=(sku)=>{
   skuObj=sku
+  selectedSku.value.price=sku.price
+  selectedSku.value.oldPrice=sku.oldPrice
+  selectedSku.value.inventory=sku.inventory
 }
+const selectedSku=ref({
+  price:'',
+  oldPrice:'',
+  inventory:null
+})
 
 //
 const count=ref(1)
@@ -154,8 +164,8 @@ const addCart=()=>{
               <p class="g-name"> {{goods.name}} </p>
               <p class="g-desc">{{goods.desc}} </p>
               <p class="g-price">
-                <span>{{goods.oldPrice}}</span>
-                <span> {{goods.price}} </span>
+                <span>{{ selectedSku.oldPrice }}</span>
+                <span> {{ selectedSku.price }} </span>
               </p>
               <div class="g-service">
                 <dl>
@@ -175,7 +185,10 @@ const addCart=()=>{
               <!-- sku组件 -->
               <Sku :goods="goods" @change="skuChange"/>
               <!-- 数据组件 -->
-              <el-input-number v-model="count" :min="1" :max="10" @change="countChange"/>
+              <div style="display: inline-flex">
+                <el-input-number v-model="count" :min="1" :max="10" @change="countChange"/>
+                <el-text style="padding-left: 20px;" v-if="selectedSku.inventory!==null">库存：{{selectedSku.inventory}}</el-text>
+              </div>
               <!-- 按钮组件 -->
               <div>
                 <el-button size="large" class="btn" @click="addCart">
