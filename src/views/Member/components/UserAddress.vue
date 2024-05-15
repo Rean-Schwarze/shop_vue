@@ -69,7 +69,7 @@ const switchAddress=(item)=>{
   background-color: #fff;
   padding: 0 30px;
   margin-top: 10px;
-  height: 500px;
+  min-height: 500px;
 
   .header {
     height: 66px;
@@ -118,6 +118,7 @@ const switchAddress=(item)=>{
   max-height: 500px;
   overflow-y: auto;
   padding-top: 20px;
+  padding-bottom: 30px;
   margin: auto;
   width: 75%;
 }
